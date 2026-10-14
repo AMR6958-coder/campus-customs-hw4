@@ -465,6 +465,20 @@ No files were created at this stage.
 
 ---
 
+### 27 — Public GitHub repository
+**Date:** 2026-10-14
+
+> ok now i would like to push th code to a public github repository and generate a repo URL.
+>
+> I want to make sure we do not upload the real.env file or the campus_customs.db, or product images in the Github repo. use .gitignore and include the env.example with placeholders only.
+
+**Result:**
+- `.gitignore` now excludes `backend/.env` (with an explicit exception for `backend/.env.example`), `data/campus_customs.db`, `data/products/`, `data.zip`, every `*.zip`, the virtual environment, `node_modules`, build output, and the local `.claude/` folder (machine-specific absolute paths).
+- Before committing, scanned the staged content for the real key and session secret (none found) and confirmed the example file holds placeholders only. 114 files committed on `main`.
+- Created the public repository with the GitHub CLI and pushed: https://github.com/AMR6958-coder/campus-customs-hw4. Verified from GitHub's file tree that no `.env`, database, photo, or archive is present. README gained a "Data (not in the repository)" section explaining how to put the assignment's data back under `data/`.
+
+---
+
 ## Closing summary (2026-10-14)
 
 Built 2026-10-12 to 2026-10-14 in 25 logged steps. The deliverable is a Yale merchandise storefront (React + Vite + TypeScript) with a FastAPI back end and two PydanticAI agents: a shopping assistant that answers price and stock questions from the SQLite database, puts matching products on the page as cards, remembers signed-in shoppers, resolves "this item" to the page product, and speaks English and Spanish; and an inventory assistant that turns tracked views, clicks, and add-to-carts into reorder and do-not-reorder notes for the owner. Guardrails: tool-only knowledge, an output validator for prices, product ids, lookups, and language, owner-only routes, PBKDF2 passwords, and an append-only audit trail of every agent run.

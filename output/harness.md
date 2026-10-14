@@ -1737,6 +1737,7 @@ Product names and dollar prices stay in English inside Spanish replies.
 | Test everything | `python app_check.py` with both servers up → `output/app_check.html` (61 checks with screenshots) |
 | Read the audit trail | `python audit_trail.py --tail 5`, or open `output/audit_trail.json` |
 | Reset demo data | `python reset_demo_data.py` (keeps accounts) |
+| Source | Public repository https://github.com/AMR6958-coder/campus-customs-hw4; `.gitignore` keeps out `backend/.env`, `data/campus_customs.db`, `data/products/`, archives, and local tooling; `backend/.env.example` holds placeholders |
 | Hand in | `python make_submission.py` → `hw4.zip` (top-level folder `hw4`) without `backend/.env`, `.venv`, `node_modules`, `dist`, or `data.zip`; the script verifies no secret value is inside |
 
 ### 15.6 Where each requirement is documented

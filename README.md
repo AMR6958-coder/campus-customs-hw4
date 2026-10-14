@@ -9,6 +9,7 @@ signed-in shoppers, speaks English and Spanish, and sends the store owner invent
 - **Brains:** two PydanticAI agents (`backend/agent.py`, `backend/inventory_agent.py`) reached
   through the Portkey gateway to OpenAI
 - **Data:** SQLite database and product photos provided with the assignment (`data/`)
+- **Repository:** <https://github.com/AMR6958-coder/campus-customs-hw4> (public; the data, the real `.env`, and archives are not committed)
 
 ## What it does
 
