@@ -479,6 +479,24 @@ No files were created at this stage.
 
 ---
 
+### 28 — Reproducible setup for graders: pinned requirements, unzip wording, portable launch config
+**Date:** 2026-10-14
+
+> If the graders clone the git code and have the same data.zip file, will thy be able to run the site? or do thy also need the virtual environment items (node_modules, build output, every .zip and the .claude/ local folder)?
+>
+> how can i share the virtual environment elements be shared without showing the direct paths with my windows user name?
+>
+> yes, pin the requirements, fix the wording, and push it. Lets also add the launch configuration in the repo.
+
+**Result:**
+- Answer: a clone plus `data.zip` is enough. Graders rebuild the environments from the recipes in the repo (`requirements.txt`, `package.json` + `package-lock.json`), unzip the data in the project root, and create `backend/.env` from the example with their own key. The virtual environment and `node_modules` are never shared: `pyvenv.cfg` and the launchers embed absolute paths with the username, and `node_modules` holds platform binaries.
+- `backend/requirements.txt` now pins the tested versions (fastapi 0.143.0, uvicorn 0.54.0, itsdangerous 2.2.0, python-dotenv 1.2.4, pydantic-ai-slim[openai] 2.55.0); `pip install --dry-run` and `pip check` pass.
+- README: `data.zip` already contains the `data/` folder, so it is unzipped in the project root (the earlier wording would have produced `data/data/`); note on pinning added.
+- `.claude/launch.json` rewritten with project-relative paths (`backend/.venv/Scripts/python.exe -m uvicorn … --app-dir backend`, `node frontend/node_modules/vite/bin/vite.js frontend`), no username anywhere; both servers were restarted from it and verified (health, page, image proxy, a configured chat). `.gitignore` now tracks only that file under `.claude/`.
+- Committed and pushed; `hw4.zip` rebuilt.
+
+---
+
 ## Closing summary (2026-10-14)
 
 Built 2026-10-12 to 2026-10-14 in 25 logged steps. The deliverable is a Yale merchandise storefront (React + Vite + TypeScript) with a FastAPI back end and two PydanticAI agents: a shopping assistant that answers price and stock questions from the SQLite database, puts matching products on the page as cards, remembers signed-in shoppers, resolves "this item" to the page product, and speaks English and Spanish; and an inventory assistant that turns tracked views, clicks, and add-to-carts into reorder and do-not-reorder notes for the owner. Guardrails: tool-only knowledge, an output validator for prices, product ids, lookups, and language, owner-only routes, PBKDF2 passwords, and an append-only audit trail of every agent run.

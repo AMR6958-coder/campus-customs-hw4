@@ -1,5 +1,6 @@
-fastapi
-uvicorn[standard]
-itsdangerous
-python-dotenv
-pydantic-ai-slim[openai]
+# Pinned to the versions the operational test (output/app_check.html) was run with on 2026-10-14.
+fastapi==0.143.0
+uvicorn[standard]==0.54.0
+itsdangerous==2.2.0
+python-dotenv==1.2.4
+pydantic-ai-slim[openai]==2.55.0

@@ -106,7 +106,8 @@ data/campus_customs.db
 data/products/<product-id>.jpg   (102 photos)
 ```
 
-They come from the `data.zip` provided with the assignment: unzip it into `data/`. The back end
+They come from the `data.zip` provided with the assignment. The zip already contains the `data/`
+folder, so unzip it in the project root (next to this README), not inside `data/`. The back end
 reports `database_found` on `GET /api/health`, and `output/harness.md` section 1 describes the
 tables.
 
@@ -128,6 +129,9 @@ If `backend/.venv` does not exist yet, create it first:
 py -3.14 -m venv backend\.venv
 backend\.venv\Scripts\python -m pip install -r backend\requirements.txt
 ```
+
+`requirements.txt` pins the exact versions the operational test was run with; `package-lock.json`
+does the same for the front end.
 
 The back end also needs a `backend/.env` file. Copy `backend/.env.example` to `backend/.env` and
 fill in:
@@ -152,7 +156,7 @@ npm run dev
 ```
 
 Then open <http://localhost:5173>. The interactive API docs are at <http://localhost:8000/docs>.
-(On the original machine the same two servers were also defined in a local `.claude/launch.json`, which is not committed.)
+In the Claude desktop app the same two servers are defined in `.claude/launch.json` (project-relative paths, so it works from any clone).
 
 To change the assistant's voice or rules, edit `backend/prompts/prompt.md` (or
 `inventory_prompt.md`) and save. The file is re-read on the next message; no restart needed.

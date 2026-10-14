@@ -1731,7 +1731,8 @@ Product names and dollar prices stay in English inside Spanish replies.
 
 | Task | How |
 |---|---|
-| Start | `backend`: `uvicorn main:app --reload --port 8000`; `frontend`: `npm run dev` (or the two launch.json entries) |
+| Start | `backend`: `uvicorn main:app --reload --port 8000`; `frontend`: `npm run dev` (or the two entries in `.claude/launch.json`, which use project-relative paths and are committed) |
+| Rebuild the environments | `pip install -r backend/requirements.txt` (versions pinned to the tested ones) and `npm install` in `frontend` (`package-lock.json`); the virtual environment and `node_modules` themselves are never shared because they embed machine paths and platform binaries |
 | Configure | `backend/.env`: `SESSION_SECRET`, `PORTKEY_API_KEY`, `OPENAI_MODEL`, `PORTKEY_BASE_URL`, optional `OWNER_EMAIL` |
 | Change the assistant's behavior | Edit `backend/prompts/prompt.md` or `inventory_prompt.md`; re-read on the next run |
 | Test everything | `python app_check.py` with both servers up → `output/app_check.html` (61 checks with screenshots) |
