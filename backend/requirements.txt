@@ -1,0 +1,5 @@
+fastapi
+uvicorn[standard]
+itsdangerous
+python-dotenv
+pydantic-ai-slim[openai]

@@ -1,0 +1,556 @@
+{
+  "started": "2026-10-14T11:32:17",
+  "finished": "2026-10-14T11:35:08",
+  "cleanup_note": "Removed the temporary account (1), 2 chat rows beyond the seed, 6 product events, 21 owner notes, and the inbox file.",
+  "checks": [
+    {
+      "section": "Cold start (recorded 2026-10-14 morning)",
+      "name": "Servers restarted from scratch",
+      "procedure": "Stop both servers; start the back end then the front end",
+      "expected": "Both start cleanly",
+      "actual": "Health OK, version 0.4.0, 102 products",
+      "passed": true,
+      "seconds": 0.0
+    },
+    {
+      "section": "Cold start (recorded 2026-10-14 morning)",
+      "name": "Anonymous home page",
+      "procedure": "Open http://localhost:5173",
+      "expected": "Approved design, fonts loaded, nav shows Cart / Log In / Create Account",
+      "actual": "EB Garamond + Source Sans 3 loaded; 4 tiles; 4 fan favorites",
+      "passed": true,
+      "seconds": 0.0
+    },
+    {
+      "section": "Cold start (recorded 2026-10-14 morning)",
+      "name": "Products and item page",
+      "procedure": "Open Products, click a card",
+      "expected": "102 cards; item page with price and six-size picker",
+      "actual": "102 cards; Benjamin Franklin T Shirt, $32, 6 size buttons",
+      "passed": true,
+      "seconds": 0.0
+    },
+    {
+      "section": "Cold start (recorded 2026-10-14 morning)",
+      "name": "Chat as a guest",
+      "procedure": "Ask 'What hoodies do you have?'",
+      "expected": "Reply plus cards on the page",
+      "actual": "27 hoodies named; 24 cards",
+      "passed": true,
+      "seconds": 0.0
+    },
+    {
+      "section": "Cold start (recorded 2026-10-14 morning)",
+      "name": "Log in",
+      "procedure": "Log in as the test user",
+      "expected": "Nav shows Inventory, Hi Test, Log Out",
+      "actual": "As expected",
+      "passed": true,
+      "seconds": 0.0
+    },
+    {
+      "section": "Cold start (recorded 2026-10-14 morning)",
+      "name": "Spanish on an item page",
+      "procedure": "Ask '¿Tienen esto en talla XL?' on the Baseball crewneck",
+      "expected": "Spanish reply, XL agotada, $58",
+      "actual": "'la talla XL … está agotada ahora mismo (0 unidades) … Cuesta $58'",
+      "passed": true,
+      "seconds": 0.0
+    },
+    {
+      "section": "Cold start (recorded 2026-10-14 morning)",
+      "name": "Cart and checkout",
+      "procedure": "Add size M, open Cart, open Checkout",
+      "expected": "Badge 1, total $58, pre-filled name, Place order disabled",
+      "actual": "As expected",
+      "passed": true,
+      "seconds": 0.0
+    },
+    {
+      "section": "Cold start (recorded 2026-10-14 morning)",
+      "name": "Owner page and review",
+      "procedure": "Open Inventory, run a review",
+      "expected": "Activity shown; notes sent",
+      "actual": "View/click/add-to-cart shown; 10 reorder notes, backlog 90",
+      "passed": true,
+      "seconds": 0.0
+    },
+    {
+      "section": "Back end and API",
+      "name": "Health endpoint",
+      "procedure": "GET /api/health",
+      "expected": "200 with database_found true",
+      "actual": "200 {'status': 'ok', 'database_found': True}",
+      "passed": true,
+      "seconds": 0.0
+    },
+    {
+      "section": "Back end and API",
+      "name": "Product list",
+      "procedure": "GET /api/products",
+      "expected": "200, 102 products, 6 sizes each, image URLs under /media/products/",
+      "actual": "200, 102 products",
+      "passed": true,
+      "seconds": 0.0
+    },
+    {
+      "section": "Back end and API",
+      "name": "Product detail matches the database",
+      "procedure": "GET /api/products/basic-hoodie-big-yale; compare with a direct SQL read",
+      "expected": "Basic Hoodie Big Yale, $68, stock [15, 5, 5, 8, 2, 25]",
+      "actual": "Basic Hoodie Big Yale, $68.0, stock [15, 5, 5, 8, 2, 25]",
+      "passed": true,
+      "seconds": 0.0
+    },
+    {
+      "section": "Back end and API",
+      "name": "Unknown product",
+      "procedure": "GET /api/products/does-not-exist",
+      "expected": "404",
+      "actual": "404",
+      "passed": true,
+      "seconds": 0.0
+    },
+    {
+      "section": "Back end and API",
+      "name": "Product image served",
+      "procedure": "GET /media/products/basic-hoodie-big-yale.jpg",
+      "expected": "200 image/jpeg",
+      "actual": "200 image/jpeg 13938 bytes",
+      "passed": true,
+      "seconds": 0.0
+    },
+    {
+      "section": "Accounts",
+      "name": "Seeded test user logs in",
+      "procedure": "POST /api/auth/login with the seeded credentials",
+      "expected": "200, first_name Test, is_owner true",
+      "actual": "200 {\"first_name\": \"Test\", \"email\": \"test@campuscustoms.yale.edu\", \"is_owner\": true}",
+      "passed": true,
+      "seconds": 0.0
+    },
+    {
+      "section": "Accounts",
+      "name": "Session cookie identifies the user",
+      "procedure": "GET /api/auth/me with the cookie",
+      "expected": "200 with the same user",
+      "actual": "200 test@campuscustoms.yale.edu",
+      "passed": true,
+      "seconds": 0.0
+    },
+    {
+      "section": "Accounts",
+      "name": "Logout clears the session",
+      "procedure": "POST /api/auth/logout then GET /api/auth/me",
+      "expected": "401",
+      "actual": "401",
+      "passed": true,
+      "seconds": 0.0
+    },
+    {
+      "section": "Accounts",
+      "name": "Wrong password and unknown email get the same generic 401",
+      "procedure": "Two bad logins",
+      "expected": "401 both, identical message",
+      "actual": "401 / 401: Invalid email or password.",
+      "passed": true,
+      "seconds": 0.0
+    },
+    {
+      "section": "Accounts",
+      "name": "Create account stores a PBKDF2 hash, never the password",
+      "procedure": "POST /api/auth/register with a temporary account; read users.password_hash",
+      "expected": "201; hash starts with pbkdf2_sha256$; plain password absent; hash verifies",
+      "actual": "201; hash prefix pbkdf2_sha256$845d4f96…; verifies=True",
+      "passed": true,
+      "seconds": 0.0
+    },
+    {
+      "section": "Accounts",
+      "name": "Duplicate email is refused",
+      "procedure": "Register the same email again",
+      "expected": "409",
+      "actual": "409",
+      "passed": true,
+      "seconds": 0.0
+    },
+    {
+      "section": "Accounts",
+      "name": "Short password is refused",
+      "procedure": "Register with a 5-character password",
+      "expected": "422",
+      "actual": "422",
+      "passed": true,
+      "seconds": 0.0
+    },
+    {
+      "section": "Accounts",
+      "name": "New account can log in",
+      "procedure": "POST /api/auth/login with the temporary account",
+      "expected": "200",
+      "actual": "200 App",
+      "passed": true,
+      "seconds": 0.0
+    },
+    {
+      "section": "Chatbot: price and stock from the database",
+      "name": "Price of a named item",
+      "procedure": "Ask the chatbot; compare with catalogue.price",
+      "expected": "Mentions $68 and no other dollar amount",
+      "actual": "The Yale Dad Hoodie is $68. It’s available in navy blue and white, in sizes XS through XXL. I’ve put it at the top of the page.",
+      "passed": true,
+      "seconds": 5.6
+    },
+    {
+      "section": "Chatbot: price and stock from the database",
+      "name": "Out-of-stock size is stated plainly",
+      "procedure": "Ask about a size with 0 units (inventory XL)",
+      "expected": "Says out of stock (database XL = 0)",
+      "actual": "Baseball Left Chest Crewneck is $58, but size XL is out of stock right now. It is available in S, M, L, and XXL; M has low stock. I've put the item at the top of the page.",
+      "passed": true,
+      "seconds": 3.1
+    },
+    {
+      "section": "Chatbot: price and stock from the database",
+      "name": "Exact count for a size",
+      "procedure": "Ask for the medium count; compare with inventory",
+      "expected": "States 5 (database M = 5)",
+      "actual": "There are 5 Medium Baseball Left Chest Crewneck sweatshirts left, so it’s low stock. I’ve put it at the top of the page.",
+      "passed": true,
+      "seconds": 2.9
+    },
+    {
+      "section": "Chatbot: price and stock from the database",
+      "name": "'This' resolves to the viewed item",
+      "procedure": "Send product_id=basic-hoodie-big-yale as page context and ask about large",
+      "expected": "Answers about Basic Hoodie Big Yale with 8 (database L = 8)",
+      "actual": "Yes—Basic Hoodie Big Yale is in stock in size L, with 8 available.",
+      "passed": true,
+      "seconds": 8.0
+    },
+    {
+      "section": "Chatbot: price and stock from the database",
+      "name": "Color question uses the catalogue colors",
+      "procedure": "Ask about pink with page context baseball-left-chest-crewneck",
+      "expected": "Says not pink; names ['navy', 'white']",
+      "actual": "No—the Baseball Left Chest Crewneck is available in navy and white, not pink. I've put it at the top of the page.",
+      "passed": true,
+      "seconds": 2.8
+    },
+    {
+      "section": "Chatbot: price and stock from the database",
+      "name": "Nothing invented when nothing matches",
+      "procedure": "Ask for an item the store does not carry (gym shorts)",
+      "expected": "Says plainly that it does not sell them; any alternatives offered are real catalogue items, none of them shorts",
+      "actual": "We don’t currently carry gym shorts, but we do have athletic tops, including the Tri Blend Sports Football T Shirt for $32 and Dry Zone Long Sleeve for $45. I’v | alternatives offered: 4",
+      "passed": true,
+      "seconds": 3.1
+    },
+    {
+      "section": "Dynamic search: cards on the page",
+      "name": "Category question returns product cards",
+      "procedure": "Ask 'What hoodies do you have?'; inspect response.products",
+      "expected": "10–24 cards, every one a real hoodie with image, name, price, description, sizes in stock",
+      "actual": "24 cards; first: Basic Hoodie Big Yale (68.0); reply: We have 27 hoodies in the catalog, with 24 shown here. Highlights include Basic Hoodie Big Yale ($68), Champion Reverse ",
+      "passed": true,
+      "seconds": 2.7
+    },
+    {
+      "section": "Dynamic search: cards on the page",
+      "name": "A second category",
+      "procedure": "Ask 'Show me your fleeces'",
+      "expected": "6+ cards, all fleece or quarter-zip items",
+      "actual": "8 cards: ['Benjamin Franklin Fleece Jacket', 'Divinity School Fleece Sweater', 'Saybrook Sweater Fleece Jacket', 'School Of Architecture Fleece Sweater']",
+      "passed": true,
+      "seconds": 2.8
+    },
+    {
+      "section": "Dynamic search: cards on the page",
+      "name": "Family keyword",
+      "procedure": "Ask 'Anything for my grandma?'",
+      "expected": "Includes Yale Grandma Hoodie",
+      "actual": "['Yale Grandma Hoodie']",
+      "passed": true,
+      "seconds": 2.7
+    },
+    {
+      "section": "Dynamic search: cards on the page",
+      "name": "Keyword search tool (English and Spanish, accents)",
+      "procedure": "Call tools.search_products directly with six queries",
+      "expected": "navy hoodie, quarter zip, law school, béisbol, camiseta azul find the right items; gym shorts finds none",
+      "actual": "'navy hoodie': 25 hits; 'quarter zip': 12 hits; 'law school': 1 hits; 'béisbol': 4 hits; 'camiseta azul': 25 hits; 'gym shorts': 0 hits",
+      "passed": true,
+      "seconds": 0.0
+    },
+    {
+      "section": "English and Spanish",
+      "name": "Spanish in, Spanish out",
+      "procedure": "Ask about hoodies in Spanish (language = auto)",
+      "expected": "Spanish reply, $ prices, English product names, hoodie cards",
+      "actual": "¡Tenemos 27 sudaderas con capucha! Todas las opciones mostradas cuestan $68, salvo Brooks Brothers Double Knit Full Zip Hoodie Yale ($88) y Yale Sports Hoodie T | 24 cards",
+      "passed": true,
+      "seconds": 2.8
+    },
+    {
+      "section": "English and Spanish",
+      "name": "Out of stock in Spanish",
+      "procedure": "Ask about XL in Spanish with page context baseball-left-chest-crewneck (XL = 0)",
+      "expected": "Says 'agotado/agotada'",
+      "actual": "La talla XL de Baseball Left Chest Crewneck está agotada ahora mismo: quedan 0 unidades. Sí hay stock en S, M, L y XXL; la M tiene pocas unidades. Lo he puesto ",
+      "passed": true,
+      "seconds": 2.6
+    },
+    {
+      "section": "English and Spanish",
+      "name": "Switches back to English",
+      "procedure": "Follow up in English",
+      "expected": "English reply with $58",
+      "actual": "The Baseball Left Chest Crewneck is $58. I've put it at the top of the page.",
+      "passed": true,
+      "seconds": 3.0
+    },
+    {
+      "section": "English and Spanish",
+      "name": "Forced Spanish",
+      "procedure": "English question with language = es",
+      "expected": "Spanish reply",
+      "actual": "Tenemos 8 resultados a $98 cada uno:\n- Benjamin Franklin Fleece Jacket\n- Divinity School Fleece Sweater\n- Saybrook Sweater Fleece Jacket\n- School Of Architectur",
+      "passed": true,
+      "seconds": 2.6
+    },
+    {
+      "section": "English and Spanish",
+      "name": "Forced English",
+      "procedure": "Spanish question with language = en",
+      "expected": "English reply with $68",
+      "actual": "The Yale Dad Hoodie costs $68. It’s available in navy blue and white, with sizes XS through XXL currently in stock. I’ve put it at the top of the page.",
+      "passed": true,
+      "seconds": 4.9
+    },
+    {
+      "section": "Customer memory",
+      "name": "Logged-in shopper is recognized",
+      "procedure": "Log in as the test user and ask",
+      "expected": "Name and account email in the reply",
+      "actual": "Yes, Test—I remember you. The email on file is test@campuscustoms.yale.edu.",
+      "passed": true,
+      "seconds": 2.8
+    },
+    {
+      "section": "Customer memory",
+      "name": "Conversation is saved and reloadable",
+      "procedure": "GET /api/chat/history after the message",
+      "expected": "History includes the 6 seeded messages plus the new exchange",
+      "actual": "200, 8 rows",
+      "passed": true,
+      "seconds": 0.0
+    },
+    {
+      "section": "Customer memory",
+      "name": "Guests are not remembered and no name is invented",
+      "procedure": "Ask as an anonymous visitor",
+      "expected": "Says it has nothing on record; suggests logging in; no name",
+      "actual": "I don’t have a name or past visits on record for you because you’re not logged in. You can log in to be remembered on future visits.",
+      "passed": true,
+      "seconds": 2.6
+    },
+    {
+      "section": "Inventory tracking and owner notes",
+      "name": "Event endpoint",
+      "procedure": "POST /api/events: 5 views + 1 click, a bad type, an unknown product",
+      "expected": "204 for valid events, 422 for a bad type, 404 for an unknown product",
+      "actual": "valid={204}, bad type=422, unknown=404",
+      "passed": true,
+      "seconds": 0.0
+    },
+    {
+      "section": "Inventory tracking and owner notes",
+      "name": "Owner-only access",
+      "procedure": "GET /api/owner/notes as a guest, as Handsome Dan, as the test user",
+      "expected": "401, 403, 200",
+      "actual": "401, 403, 200",
+      "passed": true,
+      "seconds": 0.0
+    },
+    {
+      "section": "Inventory tracking and owner notes",
+      "name": "Report applies the rules",
+      "procedure": "GET /api/owner/report",
+      "expected": "All low-stock lines ≤ 5 units (20% of 25); Yale Bowl T Shirt flagged 'viewed but not ordered'",
+      "actual": "260 low lines, 100 reorder products, hold flags ['yale-bowl-t-shirt']",
+      "passed": true,
+      "seconds": 0.0
+    },
+    {
+      "section": "Inventory tracking and owner notes",
+      "name": "Inventory assistant sends notes",
+      "procedure": "POST /api/owner/review",
+      "expected": "≤10 reorder notes for flagged products, 1 do-not-reorder note for Yale Bowl T Shirt",
+      "actual": "200; {'reorder': 10, 'do_not_reorder': 1}; summary: Sent 10 reorder notes and 1 do-not-reorder note. The reorder backlog has 90 products remaining for the next review, and the do-not-reorder b",
+      "passed": true,
+      "seconds": 12.9
+    },
+    {
+      "section": "Inventory tracking and owner notes",
+      "name": "No duplicate notes",
+      "procedure": "Run the review again; list open notes",
+      "expected": "No repeated (kind, product) pair",
+      "actual": "21 open notes, 21 distinct",
+      "passed": true,
+      "seconds": 0.0
+    },
+    {
+      "section": "Inventory tracking and owner notes",
+      "name": "Resolve a note",
+      "procedure": "POST /api/owner/notes/196/resolve",
+      "expected": "status resolved",
+      "actual": "200 resolved",
+      "passed": true,
+      "seconds": 0.0
+    },
+    {
+      "section": "Browser walkthrough (2026-10-14)",
+      "name": "Home page renders in the approved design",
+      "procedure": "Open http://localhost:5173 as a guest; read loaded fonts and the wordmark's computed font",
+      "expected": "EB Garamond and Source Sans 3 loaded; serif wordmark; 4 collection tiles; 4 fan favorites",
+      "actual": "Fonts: EB Garamond, Source Sans 3; wordmark EB Garamond; 4 tiles; 4 fan favorites",
+      "passed": true,
+      "seconds": 0.0
+    },
+    {
+      "section": "Browser walkthrough (2026-10-14)",
+      "name": "Navigation for a guest",
+      "procedure": "Read the main nav",
+      "expected": "Home, Products, About Us, Cart, Log In, Create Account",
+      "actual": "Home, Products, About Us, Cart, Log In, Create Account",
+      "passed": true,
+      "seconds": 0.0
+    },
+    {
+      "section": "Browser walkthrough (2026-10-14)",
+      "name": "Products grid and card click",
+      "procedure": "Open Products; count cards; click the first card",
+      "expected": "102 cards with image, name, price, description; click opens the item page",
+      "actual": "102 cards; first card '2025 Yale Vs Harvard T Shirt' $32 with image and 91-char description; landed on /products/2025-yale-vs-harvard-t-shirt with 6 size buttons",
+      "passed": true,
+      "seconds": 0.0
+    },
+    {
+      "section": "Browser walkthrough (2026-10-14)",
+      "name": "Size picker shows real stock and disables sold-out sizes",
+      "procedure": "Open the Baseball Left Chest Crewneck page",
+      "expected": "XS and XL 'Out of stock' and disabled; S pre-selected; M '5 left'; L and XXL '25 in stock'",
+      "actual": "XS: Out of stock (disabled); S: 15 in stock (selected); M: 5 left; L: 25 in stock; XL: Out of stock (disabled); XXL: 25 in stock",
+      "passed": true,
+      "seconds": 0.0
+    },
+    {
+      "section": "Browser walkthrough (2026-10-14)",
+      "name": "Chat puts matching items on the page",
+      "procedure": "Open the chat as a guest, ask 'Show me your fleeces', then click the second card in the 'Picked for you' strip",
+      "expected": "Reply plus mini cards under it; the strip shows the same items; clicking a strip card opens that item and the chat context follows",
+      "actual": "Reply '8 fleece matches…'; 8 mini cards; 8 strip cards visible at the top; clicked /products/divinity-school-fleece-sweater; item page opened; chat context 'Asking about: divinity school fleece sweater'",
+      "passed": true,
+      "seconds": 25
+    },
+    {
+      "section": "Browser walkthrough (2026-10-14)",
+      "name": "Language selector: Español",
+      "procedure": "Choose Español in the chat header; ask '¿Cuánto cuesta esta y qué tallas hay?' on the Divinity School Fleece Sweater page; compare with the database",
+      "expected": "Panel strings switch to Spanish; the choice is saved; Spanish reply with the real price and per-size stock",
+      "actual": "Placeholder 'Pregunta sobre ropa de Yale…', button 'Enviar', pending 'Revisando el inventario…', saved 'es'. Reply: 'La Divinity School Fleece Sweater cuesta $98. Está en stock en XS (25), S (25), M (12), L (5), XL (12) y XXL (2). L y XXL tienen pocas unidades.' Database: $98; XS 25, S 25, M 12, L 5, XL 12, XXL 2",
+      "passed": true,
+      "seconds": 20
+    },
+    {
+      "section": "Browser walkthrough (2026-10-14)",
+      "name": "Create Account validation",
+      "procedure": "Fill all five fields with a non-matching confirm password and submit",
+      "expected": "Five fields present; 'Passwords don't match.' shown; nothing sent",
+      "actual": "Fields present; error 'Passwords don't match.'; still on /create-account",
+      "passed": true,
+      "seconds": 0.0
+    },
+    {
+      "section": "Browser walkthrough (2026-10-14)",
+      "name": "About, unknown page, and Log In pages",
+      "procedure": "Open /about, /no-such-page, /login",
+      "expected": "About with three ruled sections; friendly 404 message; login form with email and password",
+      "actual": "'About Us' with 3 sections; 'We couldn't find that page.'; 'Welcome back' with both fields",
+      "passed": true,
+      "seconds": 0.0
+    },
+    {
+      "section": "Browser walkthrough (2026-10-14)",
+      "name": "Log in through the form",
+      "procedure": "Submit the login form as the test user",
+      "expected": "Redirect home; nav shows Cart, Inventory, Hi Test, Log Out; utility row says Signed in as Test User",
+      "actual": "Path /; nav Home, Products, About Us, Cart, Inventory, Hi Test, Log Out; 'Signed in as Test User'",
+      "passed": true,
+      "seconds": 0.0
+    },
+    {
+      "section": "Browser walkthrough (2026-10-14)",
+      "name": "Add to cart",
+      "procedure": "On the Baseball crewneck page choose M, quantity 2, click Add to cart",
+      "expected": "Confirmation with a cart link; nav badge 2",
+      "actual": "'Added 2 × Baseball Left Chest Crewneck (size M) to your cart.'; badge 2",
+      "passed": true,
+      "seconds": 0.0
+    },
+    {
+      "section": "Browser walkthrough (2026-10-14)",
+      "name": "Cart page totals and stock cap",
+      "procedure": "Open Cart; read the line and total; type 9 in the quantity box (M has 5 in stock)",
+      "expected": "Line $116, total $116; quantity snaps to 5, total $290, badge 5",
+      "actual": "Row 'Size M · $58 each qty=2 line=$116', total $116; after typing 9: qty 5, total $290, badge 5",
+      "passed": true,
+      "seconds": 0.0
+    },
+    {
+      "section": "Browser walkthrough (2026-10-14)",
+      "name": "Checkout page",
+      "procedure": "Open Checkout",
+      "expected": "Demo banner; contact pre-filled from the account; payment fields present; Place order disabled with a tooltip; summary lists the line",
+      "actual": "Banner shown; first name Test, email test@campuscustoms.yale.edu; all four payment fields present; Place order disabled, title 'Ordering is disabled on this sample site'; summary '5 × Baseball Left Chest Crewneck (M) $290', total $290",
+      "passed": true,
+      "seconds": 0.0
+    },
+    {
+      "section": "Browser walkthrough (2026-10-14)",
+      "name": "Remove from cart",
+      "procedure": "Back in Cart, click Remove",
+      "expected": "Empty-cart page; badge hidden",
+      "actual": "0 rows; 'Your cart is empty'; no badge",
+      "passed": true,
+      "seconds": 0.0
+    },
+    {
+      "section": "Browser walkthrough (2026-10-14)",
+      "name": "Owner page shows the numbers",
+      "procedure": "Open Inventory as the owner",
+      "expected": "Title, low-stock table, activity table including this walkthrough's own events",
+      "actual": "'Inventory notes'; 260 low-stock rows; activity: Baseball Left Chest Crewneck 4 views / 0 clicks / 2 added; 2025 Yale Vs Harvard T Shirt 1 / 1 / 0; Divinity School Fleece Sweater 1 / 1 / 0",
+      "passed": true,
+      "seconds": 0.0
+    },
+    {
+      "section": "Browser walkthrough (2026-10-14)",
+      "name": "Run an inventory review from the page",
+      "procedure": "Click 'Run inventory review'; wait for the summary",
+      "expected": "Summary shown; up to 10 reorder notes appear as cards with real quantities",
+      "actual": "'Sent 10 reorder notes for the 10 products in this review queue…'; 10 open notes; first: Reorder, Ice Hockey Left Chest Hoodie, 'sold out in M, L, and XL (0 units, 0% of par each). Suggest ordering 25 of M, 25 of L, and 25 of XL…'",
+      "passed": true,
+      "seconds": 30
+    },
+    {
+      "section": "Browser walkthrough (2026-10-14)",
+      "name": "Log out",
+      "procedure": "Click Log Out",
+      "expected": "Back home; nav returns to guest links",
+      "actual": "Path /; nav Home, Products, About Us, Cart, Log In, Create Account",
+      "passed": true,
+      "seconds": 0.0
+    }
+  ]
+}

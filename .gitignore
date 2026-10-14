@@ -1,0 +1,28 @@
+# Secrets: only the placeholder template is committed
+.env
+backend/.env
+!backend/.env.example
+
+# Instructor data stays out of the public repository (see README, "Data")
+data/campus_customs.db
+data/products/
+data.zip
+
+# Archives built by make_submission.py
+*.zip
+
+# Python
+backend/.venv/
+__pycache__/
+*.pyc
+
+# Node
+frontend/node_modules/
+frontend/dist/
+
+# Local tooling with machine-specific absolute paths
+.claude/
+
+# Editors / OS
+.DS_Store
+Thumbs.db
